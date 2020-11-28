@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  api:
+    image: pos-challenge:dev
+    build:
+      context: .
+      target: dev
+    volumes:
+      - "./:/app"
+      - "/app/node_modules"
+    ports:
+      - "5050:5050"
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:latest
+    restart: always
+    container_name: posChallenge
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: posChallengeDB
+      MYSQL_PASSWORD: password
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./docker/data/db:/var/lib/mysql
