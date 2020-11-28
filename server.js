@@ -22,5 +22,7 @@ const corsOptions = {
 const app = express();
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
+let routes = require("./routes/index");
+app.use("/api", routes);
 
 module.exports = app;
