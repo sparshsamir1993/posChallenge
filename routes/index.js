@@ -53,13 +53,32 @@ router.post("/register", (req, res) => {
     }
   })(req, res);
 });
+router.patch("/setCreditLimit", async (req, res) => {
+  console.log(req.session);
+  let { id, limit } = req.body;
+  let resp = await Cashier.findOne({
+    where: { id },
+  }).catch(errHandler);
+
+  await resp
+    .update({
+      creditLimit: limit,
+    })
+    .catch(errHandler);
+  let { creditLimit, email } = resp;
+  req.session.user = resp.dataValues;
+  req.session.save(function () {
+    console.log(req.session);
+    res.status(200).send({ id: resp.id, creditLimit, email });
+  });
+});
 
 router.get("/currentUser", async (req, res) => {
   if (req.session.user) {
     let { id } = req.session.user;
     let user = await Cashier.findOne({ where: { id } });
-    let { email, creditCheck } = user;
-    return res.status(200).json({ id, email, creditCheck });
+    let { email, creditLimit } = user;
+    return res.status(200).json({ id, email, creditLimit });
   }
 
   res.status(200).json({ data: "user not found" });

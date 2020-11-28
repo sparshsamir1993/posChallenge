@@ -4,4 +4,24 @@ import App from "./components/App";
 import axios from "axios";
 // import "./App.css";
 
-ReactDOM.render(<App />, document.querySelector("#root"));
+import { Provider } from "react-redux";
+import { createStore, applyMiddleware, compose } from "redux";
+import reducers from "./reducers";
+import ReduxThunk from "redux-thunk";
+
+window.axios = axios;
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const store = createStore(
+  reducers,
+  {},
+  composeEnhancers(applyMiddleware(ReduxThunk))
+);
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.querySelector("#root")
+);

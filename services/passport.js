@@ -6,11 +6,6 @@ const Op = Sequelize.Op;
 const BCRYPT_SALT_ROUNDS = 12;
 
 const LocalStrategy = require("passport-local").Strategy;
-
-const errHandler = (err) => {
-  console.log("Error :: " + err);
-};
-
 passport.serializeUser((user, done) => {
   done(null, user.ID);
 });
